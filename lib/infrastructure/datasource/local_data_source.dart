@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:absence_manager/infrastructure/datasource/data_source.dart';
 
@@ -8,7 +8,7 @@ class LocalDataSource extends DataSource {
   final membersPath = 'assets/json_files/members.json';
 
   Future<List<dynamic>> readJsonFile(String path) async {
-    String content = await File(path).readAsString();
+    String content = await rootBundle.loadString(path);
     Map<String, dynamic> data = jsonDecode(content);
     return data['payload'];
   }
