@@ -1,12 +1,15 @@
-import 'package:absence_manager/application/absence_cubit.dart';
 import 'package:flutter/material.dart';
 
 class FilterOptions extends StatelessWidget {
-  final AbsenceCubit absenceCubit;
   final VoidCallback filterByDate;
+  final void Function(String) filterByAbsencesByType;
+  final VoidCallback loadAllAbsences;
 
   const FilterOptions(
-      {required this.absenceCubit, required this.filterByDate, super.key});
+      {required this.filterByDate,
+      required this.filterByAbsencesByType,
+      required this.loadAllAbsences,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +21,15 @@ class FilterOptions extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-              onPressed: () {
-                absenceCubit.loadAbsences();
-              },
+              onPressed: loadAllAbsences,
               child: const Text('All'),
             ),
             ElevatedButton(
-              onPressed: () {
-                absenceCubit.filterAbsencesByType('vacation');
-              },
+              onPressed: () => filterByAbsencesByType('vacation'),
               child: const Text('Filter by Vacation'),
             ),
             ElevatedButton(
-              onPressed: () {
-                absenceCubit.filterAbsencesByType('sickness');
-              },
+              onPressed: () => filterByAbsencesByType('sickness'),
               child: const Text('Filter by Sickness'),
             ),
             ElevatedButton(

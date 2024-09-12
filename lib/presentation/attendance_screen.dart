@@ -54,7 +54,11 @@ class AttendanceScreen extends HookWidget {
 
                     // Filter Options
                     FilterOptions(
-                        absenceCubit: absenceCubit, filterByDate: filterByDate),
+                      filterByDate: filterByDate,
+                      loadAllAbsences: () => absenceCubit.loadAbsences,
+                      filterByAbsencesByType: (type) =>
+                          absenceCubit.filterAbsencesByType(type),
+                    ),
                   ],
                 ),
               state.when(
