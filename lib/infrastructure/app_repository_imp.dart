@@ -5,7 +5,9 @@ import 'package:absence_manager/infrastructure/datasource/data_source.dart';
 import 'dto_models/dto_models.dart';
 
 class AppRepositoryImp extends AppRepository {
-  late final DataSource _localDataSource;
+  final DataSource _localDataSource;
+
+  AppRepositoryImp(this._localDataSource);
 
   @override
   Future<List<AbsenceEntity>> absences() async {
