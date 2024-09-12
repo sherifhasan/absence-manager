@@ -12,10 +12,9 @@ class AbsenceEntity with _$AbsenceEntity {
     required final int userId,
     required final DateTime createdAt,
     required final DateTime startDate,
+    required final String status,
     final String? admitterNote,
     final int? admitterId,
     final String? memberNote,
-    final DateTime? confirmedAt,
-    final DateTime? rejectedAt,
   }) = _AbsenceEntity;
 }

@@ -24,14 +24,25 @@ class AbsenceDto with _$AbsenceDto {
 
   factory AbsenceDto.fromJson(Map<String, dynamic> json) =>
       _$AbsenceDtoFromJson(json);
+
+  const AbsenceDto._();
+
+  String get status {
+    if (rejectedAt != null) {
+      return 'Rejected';
+    } else if (confirmedAt != null) {
+      return 'Confirmed';
+    } else {
+      return 'Requested';
+    }
+  }
 }
 
 extension AbsenceX on AbsenceDto {
   AbsenceEntity toEntity() {
     return AbsenceEntity(
         createdAt: createdAt,
-        confirmedAt: confirmedAt,
-        rejectedAt: rejectedAt,
+        status: status,
         crewId: crewId,
         endDate: endDate,
         id: id,
