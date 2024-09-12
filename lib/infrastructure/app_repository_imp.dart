@@ -16,10 +16,10 @@ class AppRepositoryImp extends AppRepository {
   }
 
   @override
-  Future<List<MemberEntity>> members() async {
+  Future<Map<int, MemberEntity>> members() async {
     List<dynamic> membersData = await _localDataSource.members();
-    return membersData
-        .map((data) => MemberDto.fromJson(data).toEntity())
-        .toList();
+    final membersList =
+        membersData.map((data) => MemberDto.fromJson(data).toEntity()).toList();
+    return {for (var member in membersList) member.userId: member};
   }
 }
