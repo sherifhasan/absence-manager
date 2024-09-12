@@ -11,17 +11,43 @@ class AppRepositoryImp extends AppRepository {
 
   @override
   Future<List<AbsenceEntity>> absences() async {
-    List<dynamic> absenceData = await _localDataSource.absences();
-    return absenceData
-        .map((data) => AbsenceDto.fromJson(data).toEntity())
-        .toList();
+    try {
+      List<dynamic> absenceData = await _localDataSource.absences();
+
+      // Ensure the data is not empty and is a valid list
+      if (absenceData.isEmpty) {
+        throw Exception('No absence data available.');
+      }
+
+      // Convert data to AbsenceEntity
+      return absenceData
+          .map((data) => AbsenceDto.fromJson(data).toEntity())
+          .toList();
+    } catch (error) {
+      // Log the error or handle it accordingly
+      throw Exception('Failed to load absences.');
+    }
   }
 
   @override
   Future<Map<int, MemberEntity>> members() async {
-    List<dynamic> membersData = await _localDataSource.members();
-    final membersList =
-        membersData.map((data) => MemberDto.fromJson(data).toEntity()).toList();
-    return {for (var member in membersList) member.userId: member};
+    try {
+      List<dynamic> membersData = await _localDataSource.members();
+
+      // Ensure the data is not empty and is a valid list
+      if (membersData.isEmpty) {
+        throw Exception('No member data available.');
+      }
+
+      // Convert data to MemberEntity and return a map
+      final membersList = membersData
+          .map((data) => MemberDto.fromJson(data).toEntity())
+          .toList();
+      return {for (var member in membersList) member.userId: member};
+    } catch (error) {
+      // Log the error or handle it accordingly
+      print('Error fetching members: $error');
+      throw Exception('Failed to load members.');
+    }
   }
 }
