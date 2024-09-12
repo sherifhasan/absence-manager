@@ -1,4 +1,5 @@
 import 'package:absence_manager/application/absence_cubit.dart';
+import 'package:absence_manager/presentation/absences_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
+        home: const AbsenceList(),
       ),
     );
   }
