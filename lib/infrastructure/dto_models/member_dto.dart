@@ -1,3 +1,4 @@
+import 'package:absence_manager/domain/entities/entities.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'member_dto.freezed.dart';
@@ -16,4 +17,16 @@ class MemberDto with _$MemberDto {
 
   factory MemberDto.fromJson(Map<String, dynamic> json) =>
       _$MemberDtoFromJson(json);
+}
+
+extension MemberDtoX on MemberDto {
+  MemberEntity toEntity() {
+    return MemberEntity(
+      crewId: crewId,
+      id: id,
+      image: image,
+      name: name,
+      userId: userId,
+    );
+  }
 }
