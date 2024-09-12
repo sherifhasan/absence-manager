@@ -18,21 +18,30 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   Future<void> loadInitialData() async {
     emit(const AbsenceState.loading([]));
 
+    // Simulate a 2-second delay
+    await Future.delayed(const Duration(seconds: 2));
+
     try {
+      // Fetch absences and members after delay
       allAbsences = await _repository.absences();
       userMap = await _repository.members();
 
       if (allAbsences.isEmpty) {
         emit(const AbsenceState.empty());
       } else {
-        final initialAbsences = allAbsences.take(perPage).toList();
-        emit(AbsenceState.loaded(
-            absences: initialAbsences,
-            hasReachedMax: initialAbsences.length == allAbsences.length));
+        loadAbsences();
       }
     } catch (e) {
       emit(AbsenceState.error('Failed to load absences: $e'));
     }
+  }
+
+  void loadAbsences() {
+    final initialAbsences = allAbsences.take(perPage).toList();
+    emit(AbsenceState.loaded(
+      absences: initialAbsences,
+      hasReachedMax: initialAbsences.length == allAbsences.length,
+    ));
   }
 
   void loadMoreAbsences() async {
@@ -41,7 +50,7 @@ class AbsenceCubit extends Cubit<AbsenceState> {
         if (!hasReachedMax) {
           emit(AbsenceState.loading(absences));
 
-          await Future.delayed(const Duration(seconds: 1)); // Simulate delay
+          await Future.delayed(const Duration(seconds: 2)); // Simulate delay
 
           // Load the next batch of absences
           final nextAbsences =
@@ -64,8 +73,9 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     );
   }
 
-  void filterAbsencesByType(String type) {
+  Future<void> filterAbsencesByType(String type) async {
     emit(const AbsenceState.loading([]));
+    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
 
     final filteredAbsences =
         allAbsences.where((absence) => absence.type == type).toList();
@@ -73,13 +83,16 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     if (filteredAbsences.isEmpty) {
       emit(const AbsenceState.empty());
     } else {
-      emit(
-          AbsenceState.loaded(absences: filteredAbsences, hasReachedMax: true));
+      emit(AbsenceState.loaded(
+          absences: filteredAbsences,
+          hasReachedMax: filteredAbsences.length == allAbsences.length));
     }
   }
 
-  void filterAbsencesByDate(DateTime startDate, DateTime endDate) {
+  Future<void> filterAbsencesByDate(
+      DateTime startDate, DateTime endDate) async {
     emit(const AbsenceState.loading([]));
+    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
 
     final filteredAbsences = allAbsences.where((absence) {
       final absenceStart = absence.startDate;
