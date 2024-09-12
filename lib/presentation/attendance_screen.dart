@@ -19,11 +19,11 @@ class AttendanceScreen extends HookWidget {
 
     // Function to filter absences by date
     void filterByDate() async {
-      final startDate = await _selectDate(context,
+      final startDate = await _selectDate(
           initialDate: selectedStartDate.value ?? DateTime.now(),
           label: 'Select Start Date');
       if (startDate != null) {
-        final endDate = await _selectDate(context,
+        final endDate = await _selectDate(
             initialDate: selectedEndDate.value ?? startDate,
             label: 'Select End Date');
         if (endDate != null) {
@@ -87,10 +87,10 @@ class AttendanceScreen extends HookWidget {
     );
   }
 
-  Future<DateTime?> _selectDate(BuildContext context,
+  Future<DateTime?> _selectDate(
       {required DateTime initialDate, required String label}) async {
     return await showDatePicker(
-      context: context,
+      context: useContext(),
       initialDate: initialDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
