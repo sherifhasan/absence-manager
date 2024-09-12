@@ -1,1 +1,1 @@
-# absence-manager
+# Absence Manager
