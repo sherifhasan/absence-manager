@@ -1,15 +1,31 @@
 import 'package:absence_manager/domain/app_repository.dart';
 import 'package:absence_manager/domain/entities/entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'absence_state.dart';
+part 'absence_cubit.freezed.dart';
+
+part 'absence_state.dart';
 
 class AbsenceCubit extends Cubit<AbsenceState> {
   final AppRepository _repository;
   final int perPage;
 
-  List<AbsenceEntity> allAbsences = [];
-  Map<int, MemberEntity> userMap = {};
+  // Store all absences
+  final List<AbsenceEntity> _allAbsences = [];
+  List<AbsenceEntity> _filteredAbsences = [];
+
+  // Add a public getter for allAbsences list
+  List<AbsenceEntity> get allAbsences => _allAbsences;
+
+  // Assuming you have a private variable _userMap
+  final Map<int, MemberEntity> _userMap = {};
+
+  // Add a public getter for user map
+  Map<int, MemberEntity> get userMap => _userMap;
+
+  // Store the type of filter applied
+  String? _currentFilterType;
 
   AbsenceCubit({required AppRepository repository, this.perPage = 10})
       : _repository = repository,
@@ -23,8 +39,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
 
     try {
       // Fetch absences and members after delay
-      allAbsences = await _repository.absences();
-      userMap = await _repository.members();
+      _allAbsences.addAll(await _repository.absences());
+      _userMap.addAll(await _repository.members());
 
       if (allAbsences.isEmpty) {
         emit(const AbsenceState.empty());
@@ -37,6 +53,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   }
 
   void loadAbsences() {
+    _filteredAbsences.clear(); // Reset filtered absences
+    _currentFilterType = null; // Reset current filter type
     final initialAbsences = allAbsences.take(perPage).toList();
     emit(AbsenceState.loaded(
       absences: initialAbsences,
@@ -47,29 +65,33 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   void loadMoreAbsences() async {
     state.maybeWhen(
       loaded: (absences, hasReachedMax) async {
-        if (!hasReachedMax) {
-          emit(AbsenceState.loading(absences));
+        if (hasReachedMax) return;
 
-          await Future.delayed(const Duration(seconds: 2)); // Simulate delay
+        emit(AbsenceState.loading(absences));
 
-          // Load the next batch of absences
-          final nextAbsences =
-              allAbsences.skip(absences.length).take(perPage).toList();
+        await Future.delayed(const Duration(seconds: 2));
 
-          // Check if there are no more absences to load
-          if (nextAbsences.isEmpty) {
-            emit(
-              AbsenceState.loaded(absences: absences, hasReachedMax: true),
-            ); // hasReachedMax = true
-          } else {
-            emit(
-              AbsenceState.loaded(
-                  absences: absences + nextAbsences, hasReachedMax: false),
-            ); // Add new absences
-          }
+        // Determine which list to paginate: filtered or all absences
+        final absencesToPaginate =
+            _currentFilterType == null ? _allAbsences : _filteredAbsences;
+
+        final nextAbsences =
+            absencesToPaginate.skip(absences.length).take(perPage).toList();
+
+        if (nextAbsences.isEmpty) {
+          emit(AbsenceState.loaded(
+            absences: absences,
+            hasReachedMax: true,
+          ));
+        } else {
+          emit(AbsenceState.loaded(
+            absences: absences + nextAbsences,
+            hasReachedMax: absences.length + nextAbsences.length >=
+                absencesToPaginate.length,
+          ));
         }
       },
-      orElse: () => null, // Do nothing if it's not in the loaded state
+      orElse: () {},
     );
   }
 
@@ -77,15 +99,22 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     emit(const AbsenceState.loading([]));
     await Future.delayed(const Duration(seconds: 2)); // Simulate delay
 
-    final filteredAbsences =
-        allAbsences.where((absence) => absence.type == type).toList();
+    // Apply filter and store the filtered absences
+    _filteredAbsences = _allAbsences
+        .where((absence) => absence.type.toLowerCase() == type.toLowerCase())
+        .toList();
+    _currentFilterType = type; // Set the current filter type
 
-    if (filteredAbsences.isEmpty) {
+    if (_filteredAbsences.isEmpty) {
       emit(const AbsenceState.empty());
     } else {
+      // Load the first page of filtered absences
+      final initialFilteredAbsences = _filteredAbsences.take(perPage).toList();
       emit(AbsenceState.loaded(
-          absences: filteredAbsences,
-          hasReachedMax: filteredAbsences.length == allAbsences.length));
+        absences: initialFilteredAbsences,
+        hasReachedMax:
+            initialFilteredAbsences.length == _filteredAbsences.length,
+      ));
     }
   }
 
@@ -94,20 +123,23 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     emit(const AbsenceState.loading([]));
     await Future.delayed(const Duration(seconds: 2)); // Simulate delay
 
-    final filteredAbsences = allAbsences.where((absence) {
-      final absenceStart = absence.startDate;
-      final absenceEnd = absence.endDate;
-      return (absenceStart.isAfter(startDate) ||
-              absenceStart.isAtSameMomentAs(startDate)) &&
-          (absenceEnd.isBefore(endDate) ||
-              absenceEnd.isAtSameMomentAs(endDate));
+    // Filter absences by date
+    _filteredAbsences = allAbsences.where((absence) {
+      return !absence.startDate.isAfter(endDate) &&
+          !absence.endDate.isBefore(startDate);
     }).toList();
 
-    if (filteredAbsences.isEmpty) {
+    _currentFilterType = 'date'; // Set a special filter type for date
+
+    if (_filteredAbsences.isEmpty) {
       emit(const AbsenceState.empty());
     } else {
-      emit(
-          AbsenceState.loaded(absences: filteredAbsences, hasReachedMax: true));
+      final initialFilteredAbsences = _filteredAbsences.take(perPage).toList();
+      emit(AbsenceState.loaded(
+        absences: initialFilteredAbsences,
+        hasReachedMax:
+            initialFilteredAbsences.length == _filteredAbsences.length,
+      ));
     }
   }
 }

@@ -1,12 +1,10 @@
-import 'package:absence_manager/domain/entities/entities.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'absence_cubit.dart';
 
-part 'absence_state.freezed.dart';
 
 @freezed
 class AbsenceState with _$AbsenceState {
   // Initial state, before any data is loaded
-  const factory AbsenceState.initial() = _Initial;
+  const factory AbsenceState.initial() = Initial;
 
   // Loading state, data is being fetched
   const factory AbsenceState.loading(List<AbsenceEntity> absences) = _Loading;
@@ -15,11 +13,11 @@ class AbsenceState with _$AbsenceState {
   const factory AbsenceState.loaded({
     required List<AbsenceEntity> absences,
     required bool hasReachedMax, // True if there are no more absences to load
-  }) = _Loaded;
+  }) = Loaded;
 
   // Error state, an error occurred while loading absences
-  const factory AbsenceState.error(String message) = _Error;
+  const factory AbsenceState.error(String message) = Error;
 
   // Empty state, no absences are available (or after filtering returns no results)
-  const factory AbsenceState.empty() = _Empty;
+  const factory AbsenceState.empty() = Empty;
 }
