@@ -13,8 +13,15 @@ Future<void> setUp() async {
 }
 
 Future<void> initLocators() async {
-  injection.registerSingleton<DataSource>(LocalDataSource());
-  injection.registerSingleton<AppRepository>(AppRepositoryImp(injection.get()));
-  injection.registerSingleton<AbsenceCubit>(
-      AbsenceCubit(repository: injection.get()));
+  if (!injection.isRegistered<DataSource>()) {
+    injection.registerSingleton<DataSource>(LocalDataSource());
+  }
+  if (!injection.isRegistered<AppRepository>()) {
+    injection
+        .registerSingleton<AppRepository>(AppRepositoryImp(injection.get()));
+  }
+  if (!injection.isRegistered<AbsenceCubit>()) {
+    injection.registerSingleton<AbsenceCubit>(
+        AbsenceCubit(repository: injection.get()));
+  }
 }
