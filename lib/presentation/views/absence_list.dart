@@ -24,59 +24,74 @@ class AbsenceList extends HookWidget {
 
     // Add a listener for scroll to detect when we reach the end
     useEffect(() {
-      scrollController.addListener(() {
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
+      void onScroll() {
+        if (scrollController.position.pixels >=
+                scrollController.position.maxScrollExtent &&
+            !isLoading &&
+            !hasReachedMax) {
           context.read<AbsenceCubit>().loadMoreAbsences();
         }
-      });
-      return () => scrollController.dispose();
-    }, [scrollController]);
+      }
 
-    return Expanded(
-      child: ListView.builder(
-        controller: scrollController, // Use ScrollController
-        itemCount: absences.length + (isLoading || !hasReachedMax ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index >= absences.length) {
-            if (hasReachedMax) {
-              return const Center(child: Text('No more absences'));
-            }
-            return const Center(
-                child: CircularProgressIndicator()); // Show loading spinner
+      scrollController.addListener(onScroll);
+      return () => scrollController.removeListener(onScroll);
+    }, [scrollController, isLoading, hasReachedMax]);
+
+    // Calculate itemCount
+    int itemCount = absences.length;
+    if (isLoading) {
+      itemCount += 1; // Add one for the loading indicator
+    } else if (hasReachedMax && absences.isEmpty) {
+      itemCount += 1; // Add one for the 'No more absences' message
+    }
+
+    return ListView.builder(
+      controller: scrollController, // Use ScrollController
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        if (index >= absences.length) {
+          if (hasReachedMax && absences.isEmpty) {
+            return const Center(child: Text('No absences to display'));
+          } else if (hasReachedMax) {
+            return const SizedBox(); // No more items to load
+          } else {
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(child: CircularProgressIndicator()),
+            ); // Show loading spinner
           }
-          final absence = absences[index];
-          final member =
-              context.read<AbsenceCubit>().userMap[absence.userId];
+        }
+        final absence = absences[index];
+        final member = context.read<AbsenceCubit>().userMap[absence.userId];
 
-          return Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Card(
-              child: ListTile(
-                title: Text(
-                  member?.name ?? 'Unknown',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(absence.type),
-                    Text(
-                        'Period: ${absence.startDate.formatDateString()} - ${absence.endDate.formatDateString()}'),
-                    if (absence.memberNote != null &&
-                        absence.memberNote!.isNotEmpty)
-                      Text('Member Note: ${absence.memberNote}'),
-                    Text('Status: ${absence.status}'),
-                    if (absence.admitterNote != null &&
-                        absence.admitterNote!.isNotEmpty)
-                      Text('Admitter Note: ${absence.admitterNote}'),
-                  ],
-                ),
+        return Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Card(
+            child: ListTile(
+              title: Text(
+                member?.name ?? 'Unknown',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(absence.type),
+                  Text(
+                    'Period: ${absence.startDate.formatDateString()} - ${absence.endDate.formatDateString()}',
+                  ),
+                  if (absence.memberNote != null &&
+                      absence.memberNote!.isNotEmpty)
+                    Text('Member Note: ${absence.memberNote}'),
+                  Text('Status: ${absence.status}'),
+                  if (absence.admitterNote != null &&
+                      absence.admitterNote!.isNotEmpty)
+                    Text('Admitter Note: ${absence.admitterNote}'),
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
