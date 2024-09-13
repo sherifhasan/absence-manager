@@ -93,6 +93,8 @@ This application has been tested on the following platforms:
 ### Prerequisites
 
 - Flutter SDK: Ensure you have [Flutter installed](https://flutter.dev/docs/get-started/install) on your machine.
+- GetIt: [GetIt package](https://pub.dev/packages/get_it) installed.
+- Bloc: [flutter_bloc package](https://pub.dev/packages/flutter_bloc) installed.
 
 ### Setup
 
