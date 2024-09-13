@@ -66,7 +66,7 @@ Using [bloc](https://pub.dev/packages/flutter_bloc) for state management provide
 
 ### UI
 
-- **[Flutter hooks](https://pub.dev/packages/flutter_hooks) enhance readability by removing the need for `StatefulWidget` and `setState`, reducing boilerplate code
+- [Flutter hooks](https://pub.dev/packages/flutter_hooks) enhance readability by removing the need for `StatefulWidget` and `setState`, reducing boilerplate code
 
 ### Testing
 
