@@ -8,18 +8,26 @@ class LocalDataSource extends DataSource {
   final membersPath = 'assets/json_files/members.json';
 
   Future<List<dynamic>> readJsonFile(String path) async {
-    String content = await rootBundle.loadString(path);
-    Map<String, dynamic> data = jsonDecode(content);
-    return data['payload'];
+    try {
+      String content = await rootBundle.loadString(path);
+      Map<String, dynamic> data = jsonDecode(content);
+      if (data.containsKey('payload')) {
+        return data['payload'];
+      } else {
+        throw Exception('Payload key not found in JSON.');
+      }
+    } catch (e) {
+      throw Exception('Error reading JSON file at $path: $e');
+    }
   }
 
   @override
   Future<List<dynamic>> absences() async {
-    return await readJsonFile(absencesPath);
+    return readJsonFile(absencesPath);
   }
 
   @override
   Future<List<dynamic>> members() async {
-    return await readJsonFile(membersPath);
+    return readJsonFile(membersPath);
   }
 }
