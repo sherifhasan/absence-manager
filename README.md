@@ -1,92 +1,92 @@
-# Absence Manager <img src="https://img.shields.io/badge/made%20with-dart-blue.svg" alt="made with dart">
+Here's the updated **README** section with the improvements and platform details in code format:
 
+```markdown
+# Absence Manager <img src="https://img.shields.io/badge/made%20with-dart-blue.svg" alt="made with dart"> <img src="https://img.shields.io/badge/platform-android%20|%20iOS%20|%20macOS%20|%20web-green" alt="platform support">
 
-The **Absence Manager** is an application designed to help clients manage and visualize employee absences efficiently. It follows **Domain-Driven Design (DDD)** to ensure a clear separation of concerns, **BLoC (Business Logic Component)** pattern for state management, and **GetIt** for dependency injection.
-
-This project is structured around best practices to ensure maintainability, scalability, and ease of testing. With a focus on responsiveness, the app provides paginated lists, filtering capabilities, and an intuitive user experience to manage absences.
+The **Absence Manager** is an application designed to help clients manage and visualize employee absences efficiently. It follows **Domain-Driven Design (DDD)** for a modular architecture, **BLoC (Business Logic Component)** pattern for state management, and **GetIt** for dependency injection. The project is structured around best practices to ensure maintainability, scalability, and ease of testing. The app offers paginated lists, filtering capabilities, and an intuitive user experience for managing absences.
 
 ## Key Features
 
 ### Absence List
-- View a comprehensive list of absences that displays employee names and other relevant details.
+- View a comprehensive list of absences with employee names and other relevant details.
 
 ### Pagination
 - Initially displays the first 10 absences.
 - Supports infinite scrolling to load more absences as you reach the end of the list.
 
 ### Absence Count
-- Displays the total number of absences in the system for easy tracking.
+- Displays the total number of absences in the system for tracking.
 
-### Absence card
+### Absence Card
 Each absence entry includes:
 - Employee name
 - Type of absence (e.g., Vacation, Sickness)
 - Absence period (start and end dates)
-- Member note (optional, if available)
+- Optional member note
 - Absence status (Requested, Confirmed, or Rejected)
-- Admitter note (optional, if available)
+- Optional admittance note
 
 ### Filtering
 - Filter absences by type (e.g., Vacation, Sickness).
-- Filter absences by date using a date range picker for precise results.
+- Filter absences by date using a date range picker.
 
 ### Loading State
-- Displays a loading indicator while the list of absences is being retrieved.
+- Displays a loading indicator while fetching the list of absences.
 
 ### Error Handling
 - Shows an error message if the list of absences fails to load.
 
 ### Empty State
-- Displays an empty state if no absences match the current search criteria.
+- Displays an empty state if no absences match the search criteria.
+
 ---
 
 ## Technical Overview
 
 ### Architecture
 
-1. Domain driven design helps separate domain logic from framework-specific code,
-   leading to a modular and maintainable Flutter app architecture.
-2. Applying DDD principles in Flutter improves testability, scalability, and flexibility of the
-   application.
+1. Domain-Driven Design (DDD) separates domain logic from framework-specific code, leading to a modular and maintainable architecture.
+2. DDD principles in Flutter improve testability, scalability, and flexibility.
 
-### State management
+### State Management
 
-Using [bloc](https://pub.dev/packages/flutter_bloc) as a state management solution allows us to
-benefit from BLoC in our Flutter app as it offers the benefits of separation of concerns,
-flexibility,
-and reactive updates for a well-structured and efficient codebase.
+Using [bloc](https://pub.dev/packages/flutter_bloc) for state management provides separation of concerns, flexibility, and reactive updates, ensuring a well-structured codebase.
 
-### Dependency injection
+### Dependency Injection
 
-1. Using [GETIT](https://pub.dev/packages/get_it) in Flutter simplifies dependency injection,
-   singleton management, and testing,
-2. Improving code organization and modularity.
+- **[GETIT](https://pub.dev/packages/get_it)** is used for dependency injection, simplifying singleton management and testing.
+- Improves code organization and modularity.
 
-### JSON parsing
+### JSON Parsing
 
-Using the [Freezed](https://pub.dev/packages/freezed) package
-with [JSON Serializable](https://pub.dev/packages/json_serializable) package in Flutter simplifies
-JSON parsing by generating immutable data classes and automatic serialization/deserialization.
-It provides type safety, reducing runtime exceptions and improving code quality.
+- [Freezed](https://pub.dev/packages/freezed) is used with [JSON Serializable](https://pub.dev/packages/json_serializable) for generating immutable data classes and handling serialization/deserialization.
 
 ### UI
 
-1. Using the [Flutter hooks](https://pub.dev/packages/flutter_hooks) enhances code readability by
-   removing the need for StatefulWidget and setState,
-2. Reducing boilerplate code and making the logic more declarative.
-3. Flutter Hooks promotes reusability of hooks-based components, allowing for easier composition and
-   sharing of logic across different parts of the app.
+1. [Flutter hooks](https://pub.dev/packages/flutter_hooks) enhance readability by removing the need for `StatefulWidget` and `setState`, reducing boilerplate code.
+2. Promotes reusable, declarative components.
 
 ### Testing
 
-Unit testing using [Mocktail](https://pub.dev/packages/mocktail) providing a clean and expressive API for creating and verifying mock objects, reducing test setup and improving test readability
+- **[Mocktail](https://pub.dev/packages/mocktail)** provides a clean and expressive API for creating and verifying mock objects in unit tests.
 
 ### Key Packages
 
 - **flutter_bloc**: Manages state transitions using the BLoC pattern.
 - **get_it**: Provides dependency injection and service locator capabilities.
-- **freezed**: Used for creating immutable data classes and handling union types for various app states (e.g., loading, success, error).
-- **flutter_hooks**: Simplifies state management by introducing a reactive way to handle widget state.
+- **freezed**: Creates immutable data classes and handles union types.
+- **flutter_hooks**: Simplifies state management with a more reactive approach.
+
+---
+
+## Platforms Tested
+
+This application has been tested on the following platforms:
+
+- **Android**
+- **iOS**
+- **macOS**
+- **Web**
 
 ---
 
@@ -104,3 +104,15 @@ Unit testing using [Mocktail](https://pub.dev/packages/mocktail) providing a cle
    ```bash
    git clone https://github.com/sherifhasan/absence_manager.git
    cd absence_manager
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   flutter pub get
+   ```
+
+3. **Run the app**:
+   ```bash
+   flutter run
+   ```
+```
