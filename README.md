@@ -1,8 +1,13 @@
-
 # Absence Manager <img src="https://img.shields.io/badge/made%20with-dart-blue.svg" alt="made with dart"> <img src="https://img.shields.io/badge/platform-android%20|%20iOS%20|%20macOS%20|%20web-green" alt="platform support">
 
 The **Absence Manager** is an application designed to help clients manage and visualize employee absences efficiently. It follows **Domain-Driven Design (DDD)** for a modular architecture, **BLoC (Business Logic Component)** pattern for state management, and **GetIt** for dependency injection. The project is structured around best practices to ensure maintainability, scalability, and ease of testing. The app offers paginated lists, filtering capabilities, and an intuitive user experience for managing absences.
 
+## Live Demo
+
+You can view a live demo of the app hosted on **GitHub Pages** at the following link:
+
+- **[Absence Manager Demo](https://sherifhasan.github.io/absence_manager/)**
+---
 ## Key Features
 
 ### Absence List
@@ -87,7 +92,8 @@ This application has been tested on the following platforms:
 - **Web**
 
 ---
-## Folder structure
+
+## Folder Structure
 ```bash
 ├── application
 │   ├── absence_cubit.dart
@@ -123,7 +129,10 @@ This application has been tested on the following platforms:
         ├── absence_list.dart
         ├── filter_options.dart
         └── views.dart
-  ```
+```
+
+---
+
 ## How to Run the Project
 
 ### Prerequisites
@@ -143,7 +152,14 @@ This application has been tested on the following platforms:
    flutter pub get
    ```
 
-3. **Run the app**:
+3. **Generate output files**:
+   ```bash
+   dart run build_runner build --delete-conflicting-outputs
+   ```
+
+4. **Run the app**:
    ```bash
    flutter run
    ```
+
+---
