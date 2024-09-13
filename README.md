@@ -87,7 +87,43 @@ This application has been tested on the following platforms:
 - **Web**
 
 ---
-
+## Folder structure
+```bash
+├── application
+│   ├── absence_cubit.dart
+│   ├── absence_cubit.freezed.dart
+│   └── absence_state.dart
+├── domain
+│   ├── app_repository.dart
+│   └── entities
+│       ├── absence_entity.dart
+│       ├── absence_entity.freezed.dart
+│       ├── entities.dart
+│       ├── member_entity.dart
+│       └── member_entity.freezed.dart
+├── infrastructure
+│   ├── app_repository_imp.dart
+│   ├── datasource
+│   │   ├── data_source.dart
+│   │   └── local_data_source.dart
+│   └── dto_models
+│       ├── absence_dto.dart
+│       ├── absence_dto.freezed.dart
+│       ├── absence_dto.g.dart
+│       ├── dto_models.dart
+│       ├── member_dto.dart
+│       ├── member_dto.freezed.dart
+│       └── member_dto.g.dart
+├── injection.dart
+├── main.dart
+└── presentation
+    ├── attendance_screen.dart
+    ├── utils.dart
+    └── views
+        ├── absence_list.dart
+        ├── filter_options.dart
+        └── views.dart
+  ```
 ## How to Run the Project
 
 ### Prerequisites
