@@ -66,8 +66,7 @@ Using [bloc](https://pub.dev/packages/flutter_bloc) for state management provide
 
 ### UI
 
-1. [Flutter hooks](https://pub.dev/packages/flutter_hooks) enhance readability by removing the need for `StatefulWidget` and `setState`, reducing boilerplate code.
-2. Promotes reusable, declarative components.
+- [Flutter hooks](https://pub.dev/packages/flutter_hooks) enhance readability by removing the need for `StatefulWidget` and `setState`, reducing boilerplate code
 
 ### Testing
 
