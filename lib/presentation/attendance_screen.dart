@@ -33,6 +33,17 @@ class AttendanceScreen extends HookWidget {
           );
           if (!context.mounted) return;
 
+          // Validate that the endDate is not before the startDate
+          if (endDate != null && endDate.isBefore(startDate)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.red,
+                content: Text('End Date cannot be before Start Date.'),
+              ),
+            );
+            return;
+          }
+
           if (endDate != null) {
             selectedStartDate.value = startDate;
             selectedEndDate.value = endDate;
@@ -42,7 +53,9 @@ class AttendanceScreen extends HookWidget {
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error selecting dates: $e')),
+          SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Error selecting dates: $e')),
         );
       }
     }
@@ -67,13 +80,6 @@ class AttendanceScreen extends HookWidget {
       ),
       body: BlocBuilder<AbsenceCubit, AbsenceState>(
         builder: (context, state) {
-          final absences = state.maybeWhen(
-            loaded: (absences, _) => absences,
-            loading: (absences) => absences,
-            orElse: () => [],
-          );
-
-          final hasAbsences = absences.isNotEmpty;
           final totalAbsencesInSystem = absenceCubit.allAbsences.length;
 
           return Column(
@@ -86,22 +92,16 @@ class AttendanceScreen extends HookWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              if (hasAbsences) ...[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Total absences displayed: ${absences.length}',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                // Filter Options
-                FilterOptions(
-                  filterByDate: filterByDate,
-                  loadAllAbsences: loadAllAbsences,
-                  filterByAbsencesByType: filterByAbsencesByType,
-                  selectedFilter: selectedFilter.value,
-                ),
-              ],
+
+              // Filter Options (Always Visible)
+              FilterOptions(
+                filterByDate: filterByDate,
+                loadAllAbsences: loadAllAbsences,
+                filterByAbsencesByType: filterByAbsencesByType,
+                selectedFilter: selectedFilter.value,
+              ),
+
+              // Conditionally show the absence list or a message
               Expanded(
                 child: state.when(
                   initial: () => const Center(
