@@ -1,5 +1,3 @@
-Here's the updated **README** section with the improvements and platform details in code format:
-
 ```markdown
 # Absence Manager <img src="https://img.shields.io/badge/made%20with-dart-blue.svg" alt="made with dart"> <img src="https://img.shields.io/badge/platform-android%20|%20iOS%20|%20macOS%20|%20web-green" alt="platform support">
 
