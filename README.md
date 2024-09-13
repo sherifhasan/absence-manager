@@ -84,7 +84,7 @@ This application has been tested on the following platforms:
 - **Android**
 - **iOS**
 - **macOS**
-- **Web** (Modern browsers such as Chrome, Firefox, Safari, and Edge)
+- **Web**
 
 ---
 
