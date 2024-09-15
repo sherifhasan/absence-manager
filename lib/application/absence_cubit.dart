@@ -1,7 +1,5 @@
-import 'package:absence_manager/domain/app_repository.dart';
 import 'package:absence_manager/domain/entities/entities.dart';
 import 'package:absence_manager/domain/usecases/usecases.dart';
-import 'package:absence_manager/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -39,35 +37,37 @@ class AbsenceCubit extends Cubit<AbsenceState> {
 
   // Constructor initializes the use cases and sets the initial state
   AbsenceCubit({
-    required AppRepository repository,
+    required LoadInitialDataUseCase loadInitialDataUseCase,
+    required LoadMoreAbsencesUseCase loadMoreAbsencesUseCase,
+    required FilterAbsencesByTypeUseCase filterAbsencesByTypeUseCase,
+    required FilterAbsencesByDateUseCase filterAbsencesByDateUseCase,
     this.perPage = 10,
-  })  : _loadInitialDataUseCase = injection.get<LoadInitialDataUseCase>(),
-        _loadMoreAbsencesUseCase = injection.get<LoadMoreAbsencesUseCase>(),
-        _filterAbsencesByTypeUseCase =
-            injection.get<FilterAbsencesByTypeUseCase>(),
-        _filterAbsencesByDateUseCase =
-            injection.get<FilterAbsencesByDateUseCase>(),
+  })  : _loadInitialDataUseCase = loadInitialDataUseCase,
+        _loadMoreAbsencesUseCase = loadMoreAbsencesUseCase,
+        _filterAbsencesByTypeUseCase = filterAbsencesByTypeUseCase,
+        _filterAbsencesByDateUseCase = filterAbsencesByDateUseCase,
         super(const AbsenceState.initial());
 
   // Loads the initial data, fetching absences and members from the repository
   Future<void> loadInitialData() async {
-    // Emit loading state with an empty list
-    emit(const AbsenceState.loading([]));
+    emit(const AbsenceState.loading(
+        [])); // Emit loading state with an empty list
 
-    // Simulate a delay to mimic loading time
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(
+        const Duration(seconds: 1)); // Simulate a delay to mimic loading time
 
     try {
       // Fetch absences and members from the repository using the use case
       final data = await _loadInitialDataUseCase();
-      _allAbsences.addAll(data['absences']);
-      _userMap.addAll(data['members']);
+      _allAbsences
+          .addAll(data['absences']); // Store all absences in the cubit state
+      _userMap.addAll(data['members']); // Store member data
 
       // If no absences are found, emit an empty state
       if (_allAbsences.isEmpty) {
         emit(const AbsenceState.empty());
       } else {
-        // Otherwise, load the first set of absences
+        // Only load the first batch of absences (perPage)
         loadAbsences();
       }
     } catch (e) {
@@ -76,52 +76,57 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     }
   }
 
-  // Loads the first set of absences and resets the filter
   void loadAbsences() {
     _filteredAbsences.clear(); // Clear any previous filter
     _currentFilterType = null; // Reset the filter type
 
-    // Get the first batch of absences for pagination
+    // Fetch only the first batch of absences (limited by perPage)
     final initialAbsences = _allAbsences.take(perPage).toList();
 
-    // Emit the loaded state with the absences and whether pagination has reached the end
+    // Check if we have reached the max (i.e., loaded all absences)
+    final hasReachedMax = initialAbsences.length == _allAbsences.length;
+
+    // Emit the loaded state with absences and max flag
     emit(AbsenceState.loaded(
       absences: initialAbsences,
-      hasReachedMax: initialAbsences.length == _allAbsences.length,
+      hasReachedMax: hasReachedMax,
     ));
   }
 
-  // Loads more absences for pagination (when scrolling)
-  void loadMoreAbsences() async {
-    // Only proceed if the state is 'loaded' and not 'hasReachedMax'
+// Loads more absences for pagination (when scrolling)
+  Future<void> loadMoreAbsences() async {
     state.maybeWhen(
       loaded: (absences, hasReachedMax) async {
-        if (hasReachedMax) return; // Do nothing if we've reached the end
+        if (hasReachedMax) {
+          return; // Exit early if max absences have been loaded
+        }
 
         emit(AbsenceState.loading(
-            absences)); // Show loading with current absences
+            absences)); // Emit loading state with current absences
 
-        // Simulate a delay to mimic loading time
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1)); // Simulate a delay
 
-        // Determine whether to paginate all absences or the filtered ones
+        // Determine whether to paginate all absences or filtered ones
         final absencesToPaginate =
             _currentFilterType == null ? _allAbsences : _filteredAbsences;
 
-        // Fetch the next batch of absences for pagination
+        // Fetch the next set of absences
         final nextAbsences = _loadMoreAbsencesUseCase(
           allAbsences: absencesToPaginate,
           currentAbsences: absences,
         );
 
-        // Emit the loaded state with the new absences and update if pagination is finished
+        // Check if the maximum has been reached
+        final isMaxReached =
+            absences.length + nextAbsences.length >= absencesToPaginate.length;
+
+        // Emit the loaded state with the new batch of absences
         emit(AbsenceState.loaded(
           absences: absences + nextAbsences,
-          hasReachedMax: absences.length + nextAbsences.length >=
-              absencesToPaginate.length,
+          hasReachedMax: isMaxReached,
         ));
       },
-      orElse: () {}, // Do nothing if the state is not 'loaded'
+      orElse: () {}, // Do nothing if the state is not `loaded`
     );
   }
 
