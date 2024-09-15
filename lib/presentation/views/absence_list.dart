@@ -1,5 +1,5 @@
 import 'package:absence_manager/application/absence_cubit.dart';
-import 'package:absence_manager/presentation/utils.dart';
+import 'package:absence_manager/presentation/views/absence_item.dart';
 import 'package:flutter/material.dart';
 import 'package:absence_manager/domain/entities/entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,33 +64,7 @@ class AbsenceList extends HookWidget {
         final absence = absences[index];
         final member = context.read<AbsenceCubit>().userMap[absence.userId];
 
-        return Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Card(
-            child: ListTile(
-              title: Text(
-                member?.name ?? 'Unknown',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(absence.type),
-                  Text(
-                    'Period: ${absence.startDate.formatDateString()} - ${absence.endDate.formatDateString()}',
-                  ),
-                  if (absence.memberNote != null &&
-                      absence.memberNote!.isNotEmpty)
-                    Text('Member Note: ${absence.memberNote}'),
-                  Text('Status: ${absence.status}'),
-                  if (absence.admitterNote != null &&
-                      absence.admitterNote!.isNotEmpty)
-                    Text('Admitter Note: ${absence.admitterNote}'),
-                ],
-              ),
-            ),
-          ),
-        );
+        return AbsenceItem(member: member, absence: absence);
       },
     );
   }
