@@ -13,12 +13,13 @@ class AbsenceCubit extends Cubit<AbsenceState> {
 
   // Store all absences
   final List<AbsenceEntity> _allAbsences = [];
+
   List<AbsenceEntity> _filteredAbsences = [];
 
   // Add a public getter for allAbsences list
   List<AbsenceEntity> get allAbsences => _allAbsences;
 
-  // Assuming you have a private variable _userMap
+  // a private variable _userMap
   final Map<int, MemberEntity> _userMap = {};
 
   // Add a public getter for user map
@@ -34,8 +35,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   Future<void> loadInitialData() async {
     emit(const AbsenceState.loading([]));
 
-    // Simulate a 2-second delay
-    await Future.delayed(const Duration(seconds: 2));
+    // Simulate a 1-second delay
+    await Future.delayed(const Duration(seconds: 1));
 
     try {
       // Fetch absences and members after delay
@@ -69,7 +70,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
 
         emit(AbsenceState.loading(absences));
 
-        await Future.delayed(const Duration(seconds: 2));
+        // Simulate a 1-second delay
+        await Future.delayed(const Duration(seconds: 1));
 
         // Determine which list to paginate: filtered or all absences
         final absencesToPaginate =
@@ -97,7 +99,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
 
   Future<void> filterAbsencesByType(String type) async {
     emit(const AbsenceState.loading([]));
-    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
+    // Simulate a 1-second delay
+    await Future.delayed(const Duration(seconds: 1));
 
     // Apply filter and store the filtered absences
     _filteredAbsences = _allAbsences
@@ -121,7 +124,8 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   Future<void> filterAbsencesByDate(
       DateTime startDate, DateTime endDate) async {
     emit(const AbsenceState.loading([]));
-    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
+    // Simulate a 1-second delay
+    await Future.delayed(const Duration(seconds: 1));
 
     // Filter absences by date
     _filteredAbsences = allAbsences.where((absence) {
