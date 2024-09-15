@@ -36,12 +36,7 @@ class AttendanceScreen extends HookWidget {
 
           // Validate that the endDate is not before the startDate
           if (endDate != null && endDate.isBefore(startDate)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: Colors.red,
-                content: Text('End Date cannot be before Start Date.'),
-              ),
-            );
+            showSnackBarError(context, 'End Date cannot be before Start Date.');
             return;
           }
 
@@ -52,12 +47,8 @@ class AttendanceScreen extends HookWidget {
             absenceCubit.filterAbsencesByDate(startDate, endDate);
           }
         }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.red,
-              content: Text('Error selecting dates: $e')),
-        );
+      } catch (error) {
+        showSnackBarError(context, error);
       }
     }
 
@@ -142,6 +133,14 @@ class AttendanceScreen extends HookWidget {
           );
         },
       ),
+    );
+  }
+
+  void showSnackBarError(BuildContext context, Object e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error selecting dates: $e')),
     );
   }
 
