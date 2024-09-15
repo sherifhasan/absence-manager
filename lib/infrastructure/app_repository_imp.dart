@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:absence_manager/domain/app_repository.dart';
 import 'package:absence_manager/domain/entities/entities.dart';
 import 'package:absence_manager/infrastructure/datasource/data_source.dart';
-
 import 'dto_models/dto_models.dart';
 
 class AppRepositoryImp extends AppRepository {
@@ -19,12 +19,9 @@ class AppRepositoryImp extends AppRepository {
         throw Exception('No absence data available.');
       }
 
-      // Convert data to AbsenceEntity
-      return absenceData
-          .map((data) => AbsenceDto.fromJson(data).toEntity())
-          .toList();
+      // Use compute to offload the JSON processing to a separate isolate
+      return await compute(_parseAbsences, absenceData);
     } catch (error) {
-      // Log the error or handle it accordingly
       throw Exception('Failed to load absences.');
     }
   }
@@ -39,15 +36,25 @@ class AppRepositoryImp extends AppRepository {
         throw Exception('No member data available.');
       }
 
-      // Convert data to MemberEntity and return a map
-      final membersList = membersData
-          .map((data) => MemberDto.fromJson(data).toEntity())
-          .toList();
-      return {for (var member in membersList) member.userId: member};
+      // Use compute to offload the JSON processing to a separate isolate
+      return await compute(_parseMembers, membersData);
     } catch (error) {
-      // Log the error or handle it accordingly
       print('Error fetching members: $error');
       throw Exception('Failed to load members.');
     }
   }
+}
+
+// Separate function to parse absences in a background isolate
+List<AbsenceEntity> _parseAbsences(List<dynamic> absenceData) {
+  return absenceData
+      .map((data) => AbsenceDto.fromJson(data).toEntity())
+      .toList();
+}
+
+// Separate function to parse members in a background isolate
+Map<int, MemberEntity> _parseMembers(List<dynamic> membersData) {
+  final membersList =
+      membersData.map((data) => MemberDto.fromJson(data).toEntity()).toList();
+  return {for (var member in membersList) member.userId: member};
 }
