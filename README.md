@@ -95,18 +95,25 @@ This application has been tested on the following platforms:
 
 ## Folder Structure
 ```bash
+.
 ├── application
 │   ├── absence_cubit.dart
 │   ├── absence_cubit.freezed.dart
 │   └── absence_state.dart
 ├── domain
 │   ├── app_repository.dart
-│   └── entities
-│       ├── absence_entity.dart
-│       ├── absence_entity.freezed.dart
-│       ├── entities.dart
-│       ├── member_entity.dart
-│       └── member_entity.freezed.dart
+│   ├── entities
+│   │   ├── absence_entity.dart
+│   │   ├── absence_entity.freezed.dart
+│   │   ├── entities.dart
+│   │   ├── member_entity.dart
+│   │   └── member_entity.freezed.dart
+│   └── usecases
+│       ├── filter_absences_by_date.dart
+│       ├── filter_absences_by_type.dart
+│       ├── load_initial_data.dart
+│       ├── load_more_absences.dart
+│       └── usecases.dart
 ├── infrastructure
 │   ├── app_repository_imp.dart
 │   ├── datasource
