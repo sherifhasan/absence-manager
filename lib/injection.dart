@@ -30,7 +30,12 @@ Future<void> initLocators() async {
   if (!injection.isRegistered<AbsenceCubit>()) {
     injection.registerSingleton<AbsenceCubit>(
       AbsenceCubit(
-        repository: injection.get<AppRepository>(), // Injecting repository
+        loadInitialDataUseCase: injection.get<LoadInitialDataUseCase>(),
+        loadMoreAbsencesUseCase: injection.get<LoadMoreAbsencesUseCase>(),
+        filterAbsencesByDateUseCase:
+            injection.get<FilterAbsencesByDateUseCase>(),
+        filterAbsencesByTypeUseCase:
+            injection.get<FilterAbsencesByTypeUseCase>(),
         perPage: 10,
       ),
     );
