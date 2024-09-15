@@ -1,4 +1,5 @@
 import 'package:absence_manager/application/absence_cubit.dart';
+import 'package:absence_manager/presentation/utils.dart';
 import 'package:absence_manager/presentation/views/absence_list.dart';
 import 'package:absence_manager/presentation/views/filter_options.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +101,19 @@ class AttendanceScreen extends HookWidget {
                 filterByAbsencesByType: filterByAbsencesByType,
                 selectedFilter: selectedFilter.value,
               ),
+
+              // Display selected date range if date filter is applied
+              if (selectedFilter.value == 'date' &&
+                  selectedStartDate.value != null &&
+                  selectedEndDate.value != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    selectedStartDate.value.formatDateRange(
+                        selectedStartDate.value, selectedEndDate.value),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
 
               // Conditionally show the absence list or a message
               Expanded(
