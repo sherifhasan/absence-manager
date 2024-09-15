@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       create: (_) => injection<AbsenceCubit>()..loadInitialData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Attendance System',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
