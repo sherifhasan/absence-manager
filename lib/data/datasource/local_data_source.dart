@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:absence_manager/infrastructure/datasource/data_source.dart';
+import 'package:absence_manager/data/datasource/data_source.dart';
 
 class LocalDataSource extends DataSource {
   final absencesPath = 'assets/json_files/absences.json';

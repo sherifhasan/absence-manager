@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:absence_manager/domain/app_repository.dart';
 import 'package:absence_manager/domain/entities/entities.dart';
-import 'package:absence_manager/infrastructure/datasource/data_source.dart';
+import 'package:absence_manager/data/datasource/data_source.dart';
 import 'dto_models/dto_models.dart';
 
 class AppRepositoryImp extends AppRepository {

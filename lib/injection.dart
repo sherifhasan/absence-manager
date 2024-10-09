@@ -1,10 +1,10 @@
-import 'package:absence_manager/application/absence_cubit.dart';
 import 'package:absence_manager/domain/usecases/usecases.dart';
+import 'package:absence_manager/presentation/cubits/absence_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:absence_manager/domain/app_repository.dart';
-import 'package:absence_manager/infrastructure/app_repository_imp.dart';
-import 'package:absence_manager/infrastructure/datasource/data_source.dart';
-import 'package:absence_manager/infrastructure/datasource/local_data_source.dart';
+import 'package:absence_manager/data/app_repository_imp.dart';
+import 'package:absence_manager/data/datasource/data_source.dart';
+import 'package:absence_manager/data/datasource/local_data_source.dart';
 
 final GetIt injection = GetIt.instance;
 

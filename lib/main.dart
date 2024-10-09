@@ -1,5 +1,5 @@
-import 'package:absence_manager/application/absence_cubit.dart';
-import 'package:absence_manager/presentation/attendance_screen.dart';
+import 'package:absence_manager/presentation/cubits/absence_cubit.dart';
+import 'package:absence_manager/presentation/screens/attendance_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

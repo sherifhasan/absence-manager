@@ -96,10 +96,19 @@ This application has been tested on the following platforms:
 ## Folder Structure
 ```bash
 .
-├── application
-│   ├── absence_cubit.dart
-│   ├── absence_cubit.freezed.dart
-│   └── absence_state.dart
+├── data
+│   ├── app_repository_imp.dart
+│   ├── datasource
+│   │   ├── data_source.dart
+│   │   └── local_data_source.dart
+│   └── dto_models
+│       ├── absence_dto.dart
+│       ├── absence_dto.freezed.dart
+│       ├── absence_dto.g.dart
+│       ├── dto_models.dart
+│       ├── member_dto.dart
+│       ├── member_dto.freezed.dart
+│       └── member_dto.g.dart
 ├── domain
 │   ├── app_repository.dart
 │   ├── entities
@@ -114,28 +123,22 @@ This application has been tested on the following platforms:
 │       ├── load_initial_data.dart
 │       ├── load_more_absences.dart
 │       └── usecases.dart
-├── infrastructure
-│   ├── app_repository_imp.dart
-│   ├── datasource
-│   │   ├── data_source.dart
-│   │   └── local_data_source.dart
-│   └── dto_models
-│       ├── absence_dto.dart
-│       ├── absence_dto.freezed.dart
-│       ├── absence_dto.g.dart
-│       ├── dto_models.dart
-│       ├── member_dto.dart
-│       ├── member_dto.freezed.dart
-│       └── member_dto.g.dart
 ├── injection.dart
 ├── main.dart
 └── presentation
-    ├── attendance_screen.dart
-    ├── utils.dart
-    └── views
-        ├── absence_list.dart
-        ├── filter_options.dart
-        └── views.dart
+    ├── cubits
+    │   ├── absence_cubit.dart
+    │   ├── absence_cubit.freezed.dart
+    │   └── absence_state.dart
+    ├── screens
+    │   ├── attendance_screen.dart
+    │   └── views
+    │       ├── absence_item.dart
+    │       ├── absence_list.dart
+    │       ├── filter_options.dart
+    │       └── views.dart
+    └── utils.dart
+
 ```
 
 ---
